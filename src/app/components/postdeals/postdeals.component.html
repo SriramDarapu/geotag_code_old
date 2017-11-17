@@ -1,0 +1,292 @@
+<!-- <div>
+  <div style="height:20px"></div>
+  <div class="image-upload">
+    <label for="deals-pic">
+      <img src="assets/img/online-shop.png" *ngIf="!profilePicture"/>
+      <img [src]="profilePicture" *ngIf="profilePicture"/>
+    </label>
+    <input id="deals-pic" multiple type="file" name="photo"/><br>
+    <button mat-raised-button color="primary" (click)="upload()" [disabled]="fileCount>0">Upload</button>
+  </div>
+  <form (ngSubmit)="onSubmit()" [formGroup]="dealsForm" class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-select placeholder="Category" formControlName="category" name="category" required>
+        <mat-option>-- None --</mat-option>
+        <mat-option *ngFor="let category of categories" [value]="category.value">
+          {{category.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="dealsForm.controls.category.invalid">{{getCategryError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Content" formControlName="content" name="content" required></textarea>
+      <mat-error *ngIf="dealsForm.controls.content.invalid">{{getContentError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input matInput [matDatepicker]="picker" formControlName="scheduled_notification" name="scheduled_notification" placeholder="Schedule Notification">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker touchUi="true" #picker required></mat-datepicker>
+      <mat-error *ngIf="dealsForm.controls.scheduled_notification.invalid">{{getScheduleNotificationError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <table class="example-full-width" cellspacing="0">
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="start_date" name="start_date">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi="true" #startDatePicker required></mat-datepicker>
+            <mat-error *ngIf="dealsForm.controls.start_date.invalid">{{getStartDateError()}}</mat-error>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="example-full-width">
+            <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="end_date" name="end_date">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker touchUi="true" #endDatePicker required></mat-datepicker>
+            <mat-error *ngIf="dealsForm.controls.end_date.invalid">{{getEndDateError()}}</mat-error>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <table class="example-full-width" cellspacing="0">
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width">
+            <time-picker 
+              placeholder="Start Time" 
+              [(ngModel)]="start_time" 
+              [ngModelOptions]="{standalone: true}" 
+              ngDefaultControl 
+              required
+            ></time-picker>
+            <mat-icon matSuffix class="icon-size">access_time</mat-icon>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="example-full-width">
+            <time-picker 
+              placeholder="End Time" 
+              [(ngModel)]="end_time" 
+              [ngModelOptions]="{standalone: true}" 
+              ngDefaultControl 
+              required
+            ></time-picker>
+            <mat-icon matSuffix class="icon-size">access_time</mat-icon>
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    
+    <mat-form-field class="example-full-width">
+      <mat-select placeholder="Range" formControlName="range" name="range" required>
+        <mat-option>-- None --</mat-option>
+        <mat-option *ngFor="let range of ranges" [value]="range.value">
+          {{range.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="dealsForm.controls.range.invalid">{{getRangeError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <div style="height:20px"></div>
+    <button 
+      mat-raised-button 
+      class="center-button" 
+      color="primary" 
+      type="submit" 
+      [disabled]="!dealsForm.valid"
+    >
+      Submit
+    </button>
+  </form>
+</div> -->
+<mat-progress-bar mode="indeterminate" *ngIf="showProgress" style="width: 97%"></mat-progress-bar>
+<mat-horizontal-stepper [linear]="isLinear" style="width: 97%">
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Upload Deals Images</ng-template>      
+      <div class="image-upload" *ngIf="!imagesArr">
+        <label for="deals-pic">
+          <img src="assets/img/online-shop.png" *ngIf="!profilePicture"/>
+          <img [src]="profilePicture" *ngIf="profilePicture"/>
+        </label>
+        <input id="deals-pic" formControlName="images" multiple type="file" name="photo"/><br>
+        <button mat-raised-button color="primary" (click)="upload()" [disabled]="fileCount>0">Upload</button>
+      </div>
+      <mat-grid-list cols="4" rowHeight="100px" *ngIf="imagesArr">
+        <mat-grid-tile
+          *ngFor="let tile of imagesArr"
+          colspan="1"
+        >
+          <img [src]="tile.location" alt="" height="100px">
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="dealsForm">
+    <form [formGroup]="dealsForm">
+      <ng-template matStepLabel>Fill out deals details</ng-template>
+      <mat-form-field class="example-full-width">
+        <mat-select placeholder="Category" formControlName="category" name="category" required>
+          <mat-option>-- None --</mat-option>
+          <mat-option *ngFor="let category of categories" [value]="category.value">
+            {{category.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="dealsForm.controls.category.invalid">{{getCategryError()}}</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="example-full-width">
+        <input matInput placeholder="Short Description" formControlName="short_desc" name="short_desc" required>
+        <mat-error *ngIf="dealsForm.controls.short_desc.invalid">{{getShortDescError()}}</mat-error>
+      </mat-form-field> 
+      <br>
+      <mat-form-field class="example-full-width">
+        <textarea matInput placeholder="Content" formControlName="content" name="content" required></textarea>
+        <mat-error *ngIf="dealsForm.controls.content.invalid">{{getContentError()}}</mat-error>
+      </mat-form-field>
+      <br>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="picker" formControlName="scheduled_notification_date" name="scheduled_notification_date" placeholder="Schedule Notification Date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker touchUi="true" #picker required></mat-datepicker>
+              <mat-error *ngIf="dealsForm.controls.scheduled_notification_date.invalid">{{getScheduleNotificationError()}}</mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <time-picker 
+                placeholder="Scheduled Notification Time" 
+                [(ngModel)]="scheduled_notification_time" 
+                [ngModelOptions]="{standalone: true}" 
+                ngDefaultControl 
+                required
+              ></time-picker>
+              <mat-icon matSuffix class="icon-size">access_time</mat-icon>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="startDatePicker" placeholder="Start Date" formControlName="start_date" name="start_date">
+              <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker touchUi="true" #startDatePicker required></mat-datepicker>
+              <mat-error *ngIf="dealsForm.controls.start_date.invalid">{{getStartDateError()}}</mat-error>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput [matDatepicker]="endDatePicker" placeholder="End Date" formControlName="end_date" name="end_date">
+              <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker touchUi="true" #endDatePicker required></mat-datepicker>
+              <mat-error *ngIf="dealsForm.controls.end_date.invalid">{{getEndDateError()}}</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <time-picker 
+                placeholder="Start Time" 
+                [(ngModel)]="start_time" 
+                [ngModelOptions]="{standalone: true}" 
+                ngDefaultControl 
+                required
+              ></time-picker>
+              <mat-icon matSuffix class="icon-size">access_time</mat-icon>
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field class="example-full-width">
+              <time-picker 
+                placeholder="End Time" 
+                [(ngModel)]="end_time" 
+                [ngModelOptions]="{standalone: true}" 
+                ngDefaultControl 
+                required
+              ></time-picker>
+              <mat-icon matSuffix class="icon-size">access_time</mat-icon>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      
+      <mat-form-field class="example-full-width">
+        <mat-select placeholder="Range" formControlName="range" name="range" required>
+          <mat-option>-- None --</mat-option>
+          <mat-option *ngFor="let range of ranges" [value]="range.value">
+            {{range.viewValue}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="dealsForm.controls.range.invalid">{{getRangeError()}}</mat-error>
+      </mat-form-field>
+      <br>
+      <div style="height:20px"></div>
+      <!-- <button 
+        mat-raised-button 
+        class="center-button" 
+        color="primary" 
+        type="submit" 
+        [disabled]="!dealsForm.valid"
+      >
+        Submit
+      </button> -->
+      <div>
+        <button mat-raised-button matStepperPrevious>Back</button>
+        <button 
+          mat-raised-button 
+          matStepperNext 
+          color="primary" 
+          type="button" 
+          [disabled]="!dealsForm.valid"
+        >Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Check your Details</ng-template>
+    <mat-list>
+      <mat-list-item>Category: {{this.dealsForm.value.category}}</mat-list-item>
+      <mat-list-item>Content: {{this.dealsForm.value.content}}</mat-list-item>
+      <mat-list-item>
+        Scheduled Notification Date: 
+        {{this.dealsForm.value.scheduled_notification_date}}
+      </mat-list-item>
+      <mat-list-item>
+        Scheduled Notification Time: {{this.scheduled_notification_time.hrs}}:{{this.scheduled_notification_time.mins}} {{this.scheduled_notification_time.meridiem}}
+      </mat-list-item>
+      <mat-list-item>Start Date: {{this.dealsForm.value.start_date}}</mat-list-item>
+      <mat-list-item>End Date: {{this.dealsForm.value.end_date}}</mat-list-item>
+      <mat-list-item>Start Time: {{this.start_time.hrs}}:{{this.start_time.mins}} {{this.start_time.meridiem}}</mat-list-item>
+      <mat-list-item>End Time: {{this.end_time.hrs}}:{{this.end_time.mins}} {{this.end_time.meridiem}}</mat-list-item>
+      <mat-list-item>Range: {{this.dealsForm.value.range}}</mat-list-item>
+    </mat-list>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button 
+        mat-raised-button 
+        matStepperNext
+        (click) = "onSubmit()"
+        class="center-button" 
+        color="primary" 
+        type="submit" 
+        [disabled]="!dealsForm.valid"
+      >
+        Submit
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

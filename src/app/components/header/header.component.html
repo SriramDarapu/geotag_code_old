@@ -1,0 +1,20 @@
+<mat-toolbar color="primary" layout="fill" class="mat-elevation-z10">
+	<span style="cursor:pointer" routerLink="/home">{{ title }}</span>
+	<span class="fill-space"></span>
+	<!-- <a mat-raised-button color="accent" [href]="websiteUrl" target="_blank">
+		About Answerer
+		<mat-icon>info</mat-icon>
+	</a> -->
+	<button mat-button routerLinkActive="active" *ngIf="!isLoggedIn" routerLink="/login">
+    Login
+  </button>
+	<button mat-button routerLinkActive="active" *ngIf="!isLoggedIn" routerLink="/registration">
+    Register
+  </button>
+	<button mat-button routerLinkActive="active" *ngIf="isLoggedIn" (click)="gotoEditProfile()">
+		Edit Profile
+  </button>
+	<button mat-button routerLinkActive="active" *ngIf="isLoggedIn" (click)="logout()">
+		Logout
+  </button>
+</mat-toolbar>

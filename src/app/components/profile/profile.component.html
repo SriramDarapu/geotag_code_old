@@ -1,0 +1,80 @@
+<mat-progress-bar mode="indeterminate" *ngIf="showProgress"></mat-progress-bar>
+<div>
+  <div style="height:20px"></div>
+  <div class="image-upload">
+    <label for="file-input">
+      <img src="assets/img/avatar.png" *ngIf="!profilePicture"/>
+      <img [src]="profilePicture" *ngIf="profilePicture"/>
+    </label>
+    <input id="file-input" type="file" name="photo"/><br>
+    <!-- <button 
+      type="button" 
+      class="btn btn-success btn-s" 
+      (click)="upload()" 
+    >
+      Upload
+    </button> -->
+    <button mat-raised-button color="primary" (click)="upload()" [disabled]="fileCount>0">Upload</button>
+  </div>
+  <form [formGroup]="profileForm" class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput formControlName="name" placeholder="Name" name="name" [(ngModel)]="data.name" required>
+      <mat-error *ngIf="profileForm.controls.name.invalid">{{getNameError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input matInput #input maxlength="10" formControlName="phone" [(ngModel)]="data.phone" placeholder="Mobile Number" name="phone" required>
+      <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+      <mat-error *ngIf="profileForm.controls.phone.invalid">{{getMobileError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Email" formControlName="email" name="email" [(ngModel)]="data.email" required>
+      <mat-error *ngIf="profileForm.controls.email.invalid">{{getEmailError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-select placeholder="Business" formControlName="business_ctgry" name="business_ctgry" [(ngModel)]="data.business_ctgry" required>
+        <mat-option>-- None --</mat-option>
+        <mat-option *ngFor="let business_ctgry of categories" [value]="business_ctgry.value">
+          {{business_ctgry.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="profileForm.controls.business_ctgry.invalid">{{getCategryError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <input 
+        matInput 
+        formControlName="location" 
+        placeholder="Location" 
+        autocorrect="off" 
+        autocapitalize="off" 
+        spellcheck="off" 
+        #search 
+        name="location" 
+        [(ngModel)]="data.location" 
+        required
+      >
+      <mat-icon matSuffix>location_on</mat-icon>
+      <mat-error *ngIf="profileForm.controls.location.invalid">{{getLocationError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <mat-select placeholder="Range" formControlName="radius" name="radius" [(ngModel)]="data.radius" required>
+        <mat-option>-- None --</mat-option>
+        <mat-option *ngFor="let radius of ranges" [value]="radius.value">
+          {{radius.viewValue}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="profileForm.controls.radius.invalid">{{getRadiusError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Address" formControlName="address" name="address" [(ngModel)]="data.address" required></textarea>
+      <mat-error *ngIf="profileForm.controls.address.invalid">{{getAddrsError()}}</mat-error>
+    </mat-form-field>
+    <div style="height:20px"></div>
+    <button mat-raised-button class="center-button" color="primary" (click)="onSubmit()" [disabled]="!profileForm.valid">Submit</button>
+  </form>
+</div>

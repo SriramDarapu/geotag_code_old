@@ -1,0 +1,17 @@
+<mat-progress-bar mode="indeterminate" *ngIf="showProgress"></mat-progress-bar>
+<div class="example-container">
+  <form (ngSubmit)="onSubmit()" [formGroup]="regForm">
+    <mat-form-field>
+      <input matInput #input maxlength="10" formControlName="phone" placeholder="Mobile Number" name="phone" required>
+      <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+      <mat-error *ngIf="regForm.controls.phone.invalid">{{getMobileError()}}</mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+      <input matInput placeholder="Email" formControlName="email" name="email" required>
+      <mat-error *ngIf="regForm.controls.email.invalid">{{getEmailError()}}</mat-error>
+    </mat-form-field>
+    <div style="height:20px"></div>
+    <button mat-raised-button class="center-button" color="primary" type="submit" [disabled]="!regForm.valid">Submit</button>
+  </form>
+</div>

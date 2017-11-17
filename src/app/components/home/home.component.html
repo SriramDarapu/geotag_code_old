@@ -1,0 +1,16 @@
+<mat-sidenav-container class="docs-component-viewer-sidenav">
+    <mat-sidenav mode="side" opened="true" style="width:200px;" class="mat-elevation-z6">
+        <mat-nav-list>
+            <mat-list-item [routerLinkActive]="['active-route']" *ngFor="let link of links" (click)="goToLink(link)">
+                <mat-icon matListIcon color="primary">{{link.icon}}</mat-icon>
+                <a matLine color="primary">{{ link.name }}</a>
+               <!-- <button mat-icon-button (click)="showInfo(link)">
+                  <mat-icon>info</mat-icon>
+               </button> -->
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+    <div class="my-content" style="padding: 20px;">
+        <router-outlet></router-outlet>
+    </div>
+</mat-sidenav-container>
